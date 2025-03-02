@@ -1,74 +1,76 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import * as React from "react";
+import { StatusBar, SafeAreaView } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Welcome from "../../screens/Welcome";
+import Login from "../../screens/Login";
+import Signup from "../../screens/Signup";
+import HomeScreen from "../../screens/HomeScreen";
+import LandlordHome from "../../screens/LandlordHome";
+import PropertyDetailUser from "../../screens/PropertyDetailUser";
+import Notifications from "../../screens/Notifications";
+import Bookings from "../../screens/Bookings";
+import ProfilePage from "../../screens/ProfilePage";
+import ConfirmPay from "../../screens/ConfirmPay";
+import SuccessPage from "../../screens/SuccessPage";
+import EditProfile from "../../screens/EditProfile";
+import PropertyList from "../../screens/PropertyList";
+import SuccessPagePropertyUpload from "../../screens/SuccessPagePropertyUpload";
+import LandlordNotifications from "../../screens/LandlordNotifications";
+import YourProperties from "../../screens/YourProperties";
+import LandlordProfile from "../../screens/LandlordProfile";
+import LandlordEditProfile from "../../screens/LandlordEditProfile";
+import VerificationWaiting from "../../screens/VerificationWaiting";
+import PropertyCard from "../../screens/PropertyCard";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const Stack = createNativeStackNavigator();
 
-export default function HomeScreen() {
+const App = () => {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <>
+      <StatusBar barStyle="dark-content" />
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="Welcome"
+      >
+        <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="LandlordHome" component={LandlordHome} />
+        <Stack.Screen
+          name="PropertyDetailUser"
+          component={PropertyDetailUser}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <Stack.Screen name="Notifications" component={Notifications} />
+        <Stack.Screen name="Bookings" component={Bookings} />
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
+        <Stack.Screen name="ConfirmPay" component={ConfirmPay} />
+        <Stack.Screen name="SuccessPage" component={SuccessPage} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="PropertyList" component={PropertyList} />
+        <Stack.Screen
+          name="SuccessPagePropertyUpload"
+          component={SuccessPagePropertyUpload}
+        />
+        <Stack.Screen
+          name="LandlordNotifications"
+          component={LandlordNotifications}
+        />
+        <Stack.Screen name="YourProperties" component={YourProperties} />
+        <Stack.Screen name="LandlordProfile" component={LandlordProfile} />
+        <Stack.Screen
+          name="LandlordEditProfile"
+          component={LandlordEditProfile}
+        />
+        <Stack.Screen
+          name="VerificationWaiting"
+          component={VerificationWaiting}
+        />
+        <Stack.Screen name="PropertyCard" component={PropertyCard} />
+      </Stack.Navigator>
+    </>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+export default App;
