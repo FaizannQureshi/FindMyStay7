@@ -16,7 +16,6 @@ export const signUpUser = async (email, password, additionalData) => {
     const user = userCredential.user;
     await sendEmailVerification(user);
 
-    // 🔥 Store role-specific user data under "/users/{uid}/roles/{role}"
     const userRoleRef = doc(db, "users", user.uid, "roles", additionalData.role);
     const userRoleSnap = await getDoc(userRoleRef);
 
@@ -24,7 +23,7 @@ export const signUpUser = async (email, password, additionalData) => {
       throw new Error(`An account with the role "${additionalData.role}" already exists for this email.`);
     }
 
-    await setDoc(userRoleRef, {
+    await setDoc(doc(db, "users", user.uid), {
       uid: user.uid,
       email: user.email,
       role: additionalData.role,

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, TouchableOpacity, Dimensions } from "react-native";
-import Carousel from "react-native-reanimated-carousel";
+import { ScrollView, TouchableOpacity, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import {
     Section,
@@ -17,8 +16,6 @@ import {
 } from "../styles/HomeScreenStyles"; // Adjust path as needed
 
 import { fetchProperties } from "../firebase/propertyService";
-
-const { width: viewportWidth } = Dimensions.get("window");
 
 const PropertyCard = ({ navigation }) => {
     const [popularProperties, setPopularProperties] = useState([]);
@@ -54,29 +51,17 @@ const PropertyCard = ({ navigation }) => {
                         key={property.id}
                         onPress={() =>
                             navigation.navigate("PropertyDetailUser", {
-                                screen: "index",
-                                params: { property },
+                                property: property, // Pass the complete property object
                             })
                         }
                     >
                         <Card>
-                            <Carousel
-                                width={200} // Updated to match the card width
-                                height={150} // Adjust height as needed
-                                data={property.images}
-                                renderItem={({ item }) => (
-                                    <CardImage
-                                        source={{ uri: item }}
-                                        style={{ width: '100%', height: '100%' }}
-                                        resizeMode="cover" // Ensures the image covers the area properly
-                                    />
-                                )}
-                                autoPlay
-                                loop
-                                pagingEnabled
-                                style={{ borderRadius: 8 }}
+                            {/* Static image - just display the first image from the array */}
+                            <CardImage
+                                source={{ uri: property.images && property.images.length > 0 ? property.images[0] : 'https://via.placeholder.com/200x150' }}
+                                style={{ width: 200, height: 150 }}
+                                resizeMode="cover"
                             />
-
 
                             <CardContent>
                                 <CardTitle>{property.title}</CardTitle>
@@ -100,7 +85,6 @@ const PropertyCard = ({ navigation }) => {
         <>
             {renderSection("Hostels Near You", nearbyProperties)}
             {renderSection("Popular Hostels", popularProperties)}
-
         </>
     );
 };

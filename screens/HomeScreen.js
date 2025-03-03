@@ -5,7 +5,6 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet } from 'react-native';
-import axios from 'axios';
 import { Alert, TextInput } from 'react-native';
 import PropertyCard from "../screens/PropertyCard";
 import {
@@ -32,7 +31,6 @@ import {
   NavItem,
   NavText,
 } from '../styles/HomeScreenStyles';
-
 
 const styles = StyleSheet.create({
   container: {
@@ -64,18 +62,16 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
 const HomeScreen = ({ navigation, route }) => {
   const [userData, setUserData] = useState(null);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [manualAddress, setManualAddress] = useState('');
-  const [suggestions, setSuggestions] = useState([]); // ✅ Should be an empty array
+  const [suggestions, setSuggestions] = useState([]); // Empty array
   const [selectedLocation, setSelectedLocation] = useState({
     latitude: 33.6844, // Default (Islamabad)
     longitude: 73.0479,
   });
-
+  const [selectedCategory, setSelectedCategory] = useState('Hostel');
 
   const fetchLocationName = async (latitude, longitude) => {
     try {
@@ -97,7 +93,6 @@ const HomeScreen = ({ navigation, route }) => {
       return 'Unknown Location';
     }
   };
-
 
   const fetchLocationFromAddress = async (address) => {
     try {
@@ -136,12 +131,7 @@ const HomeScreen = ({ navigation, route }) => {
     }
   };
 
-
-
-
-
-
-  // ✅ Fetch user data based on UID passed from handleLogin
+  // Fetch user data based on UID passed from handleLogin
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -172,7 +162,7 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, [route?.params?.uid]);
 
-  // 🔔 Prompt user to set location after 3 seconds if not set
+  // Prompt user to set location after 3 seconds if not set
   useEffect(() => {
     if (userData && !userData.location) {
       const timer = setTimeout(() => {
@@ -187,11 +177,9 @@ const HomeScreen = ({ navigation, route }) => {
         );
       }, 3000); // 3 seconds delay
 
-      return () => clearTimeout(timer); // ✅ Cleanup on unmount
+      return () => clearTimeout(timer); // Cleanup on unmount
     }
   }, [userData]);
-
-
 
   const handleLocationSave = async () => {
     try {
@@ -210,48 +198,13 @@ const HomeScreen = ({ navigation, route }) => {
     }
   };
 
-
-
-  const properties = [
-    {
-      id: 1,
-      title: 'Zaviar Hostel For Boys',
-      location: 'G-10/Islamabad',
-      price: 'Rs 8000 /month',
-      rating: 4.7,
-      image:
-        'https://t4.ftcdn.net/jpg/02/19/66/93/360_F_219669327_v12pBKc7TB62E3uCJrgRRkDhfVENK3z5.jpg',
-    },
-    {
-      id: 2,
-      title: 'Khadija Hostel For Girls',
-      location: 'H-12/Islamabad',
-      price: 'Rs 5200 /month',
-      rating: 4.5,
-      image:
-        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/03/a9/c5/50/corner-hostel.jpg?w=700&h=-1&s=1',
-    },
-  ];
-
-  const popularproperties = [
-    {
-      id: 1,
-      title: 'Zainab Hostel For Girls',
-      location: 'G-11/Islamabad',
-      price: 'Rs 7500 /month',
-      rating: 4.3,
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlXDK_Svh57mfrTU2XTjWd5ELa6_sj1fbynw&s',
-    },
-  ];
-
   return (
     <Container>
       <ScrollView>
         <Header>
           <LocationRow>
             <TouchableOpacity onPress={() => setShowLocationModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Icon name="location-on" size={22} color="#5D4940;" style={{ marginRight: 4 }} />
+              <Icon name="location-on" size={22} color="#5D4940" style={{ marginRight: 4 }} />
               <View>
                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
                   {userData?.locationName?.split(', ')[0] || 'City'}
@@ -276,14 +229,14 @@ const HomeScreen = ({ navigation, route }) => {
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Select Your Location</Text>
 
-              {/* 🔍 Manual Address Input */}
+              {/* Manual Address Input */}
               <TextInput
                 placeholder="Enter your location (e.g., Multan, Pakistan)"
                 value={manualAddress}
                 onChangeText={(text) => {
                   setManualAddress(text);
                   if (text.length > 2) {
-                    fetchLocationSuggestions(text); // 🔄 Fetch suggestions after 2 chars
+                    fetchLocationSuggestions(text); // Fetch suggestions after 2 chars
                   } else {
                     setSuggestions([]); // Clear suggestions if text is short
                   }
@@ -296,7 +249,7 @@ const HomeScreen = ({ navigation, route }) => {
                   marginBottom: 5,
                 }}
               />
-              {/* 🔽 Suggestions Dropdown */}
+              {/* Suggestions Dropdown */}
               {Array.isArray(suggestions) && suggestions.map((item, index) => (
                 <TouchableOpacity
                   key={index}
@@ -329,7 +282,7 @@ const HomeScreen = ({ navigation, route }) => {
                 }}
               />
 
-              {/* 🗺️ Map View */}
+              {/* Map View */}
               <MapView
                 style={styles.map}
                 region={{
@@ -343,7 +296,7 @@ const HomeScreen = ({ navigation, route }) => {
                 <Marker coordinate={selectedLocation} />
               </MapView>
 
-              {/* 💾 Save/Cancel Buttons */}
+              {/* Save/Cancel Buttons */}
               <Button
                 title={userData && userData.location ? 'Update Location' : 'Save Location'}
                 onPress={handleLocationSave}
@@ -353,32 +306,31 @@ const HomeScreen = ({ navigation, route }) => {
           </View>
         </Modal>
 
-
-
         {/* Categories */}
         <Categories>
-          <Category selected>
-            <Icon name="home" size={24} color="#fff" />
-            <CategoryText selected>Hostel</CategoryText>
+          <Category selected={selectedCategory === 'Hostel'} onPress={() => setSelectedCategory('Hostel')}>
+            <Icon name="home" size={24} color={selectedCategory === 'Hostel' ? "#fff" : "#666"} />
+            <CategoryText selected={selectedCategory === 'Hostel'}>Hostel</CategoryText>
           </Category>
-          <Category>
-            <Icon name="holiday-village" size={24} color="#666" />
-            <CategoryText>Homestay</CategoryText>
+          <Category selected={selectedCategory === 'Homestay'} onPress={() => setSelectedCategory('Homestay')}>
+            <Icon name="holiday-village" size={24} color={selectedCategory === 'Homestay' ? "#fff" : "#666"} />
+            <CategoryText selected={selectedCategory === 'Homestay'}>Homestay</CategoryText>
           </Category>
-          <Category>
-            <Icon name="apartment" size={24} color="#666" />
-            <CategoryText>Apartment</CategoryText>
+          <Category selected={selectedCategory === 'Apartment'} onPress={() => setSelectedCategory('Apartment')}>
+            <Icon name="apartment" size={24} color={selectedCategory === 'Apartment' ? "#fff" : "#666"} />
+            <CategoryText selected={selectedCategory === 'Apartment'}>Apartment</CategoryText>
           </Category>
-          <Category>
-            <Icon name="hotel" size={24} color="#666" />
-            <CategoryText>Hotel</CategoryText>
+          <Category selected={selectedCategory === 'Hotel'} onPress={() => setSelectedCategory('Hotel')}>
+            <Icon name="hotel" size={24} color={selectedCategory === 'Hotel' ? "#fff" : "#666"} />
+            <CategoryText selected={selectedCategory === 'Hotel'}>Hotel</CategoryText>
           </Category>
         </Categories>
 
-        {/* Near Location */}
-        <PropertyCard navigation={navigation} />
-
-        
+        {/* PropertyCard component - now with category filtering */}
+        <PropertyCard 
+          navigation={navigation} 
+          category={selectedCategory}
+        />
 
         {/* Bottom Navigation */}
         <BottomNav>

@@ -32,10 +32,6 @@ const Login = () => {
   const [role, setRole] = useState(null); // No default now
   const [selectedRole, setSelectedRole] = useState(null);
 
-
-
-
-
   useEffect(() => {
     const loadRememberedUser = async () => {
       const savedEmail = await AsyncStorage.getItem('email');
@@ -52,79 +48,16 @@ const Login = () => {
   }, []);
 
 
-
-  // const handleLogin = async () => {
-  //   if (!email || !password || !role) {
-  //     Alert.alert("Missing Information", "Please enter all fields and select a role.");
-  //     return;
-  //   }
-
-  //   try {
-
-
-
-  //     // ✅ Sign in the user
-  //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-  //     const user = userCredential.user;
-
-  //     // 🔄 Ensure user is verified before proceeding
-  //     await user.reload();
-  //     if (!user.emailVerified) {
-  //       Alert.alert("Error", "Please verify your email before logging in.");
-  //       return;
-  //     }
-
-  //     // 🔍 Fetch user role from Firestore
-  //     const userDocRef = doc(db, "users", user.uid); // ✅ Correct usage
-  //     const userDocSnap = await getDoc(userDocRef);
-
-  //     if (userDocSnap.exists()) {
-  //       const userData = userDocSnap.data();
-
-  //       if (userData.role !== role) {
-  //         // 🚫 Role mismatch: show alert and redirect to Signup
-  //         Alert.alert(
-  //           "Role Mismatch",
-  //           `This account is registered as a "${userData.role}". Please create a new account as a "${role}".`,
-  //           [
-  //             {
-  //               text: "Go to Signup",
-  //               onPress: () => navigation.navigate("Signup"), // 🌟 Redirect to Signup
-  //             },
-  //           ],
-  //           { cancelable: false }
-  //         );
-  //         return; // 🚀 Prevent further navigation
-  //       }
-
-  //       // 🏡 ✅ Correct role: Navigate to the correct home screen
-  //       if (role === "Buyer") {
-  //         navigation.navigate("HomeScreen", { uid: user.uid }); // Passing only UID (Serializable)
-  //       } else if (role === "Landlord") {
-  //         navigation.navigate("LandlordHome", { uid: user.uid });
-  //       }
-  //     } else {
-  //       throw new Error("User data not found. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login Error:", error.message);
-  //     Alert.alert("Login Error", error.message);
-  //   }
-  // };
-
-
-
-
   const handleLogin = async () => {
     if (!email || !password || !role) {
       Alert.alert("Missing Information", "Please enter all fields and select a role.");
       return;
     }
-
+  
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
+  
       if (rememberMe) {
         await AsyncStorage.setItem('email', email);
         await AsyncStorage.setItem('password', password);
@@ -134,34 +67,33 @@ const Login = () => {
         await AsyncStorage.removeItem('password');
         await AsyncStorage.removeItem('rememberMe');
       }
-
+  
       await user.reload();
       if (!user.emailVerified) {
         Alert.alert("Error", "Please verify your email before logging in.");
         return;
       }
-
-      const userDocRef = doc(db, "users", user.uid, "roles", role);
+  
+      // 🔍 Fetch user document directly from Firestore
+      const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
-
+  
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
+  
         if (userData.role !== role) {
-          // 🚫 Role mismatch: show alert and redirect to Signup
           Alert.alert(
             "Role Mismatch",
-            `This account is registered as a "${userData.role}". Please create a new account as a "${role}".`,
-            [
-              {
-                text: "Go to Signup",
-                onPress: () => navigation.navigate("Signup"), // 🌟 Redirect to Signup
-              },
-            ],
+            `This account is registered as a "${userData.role}". Please log in with the correct role.`,
+            [{ text: "OK" }],
             { cancelable: false }
           );
-          return; // 🚀 Prevent further navigation
+          return;
         }
+  
+        // 🎯 Navigate based on role
         navigation.navigate(role === "Buyer" ? "HomeScreen" : "LandlordHome", { uid: user.uid });
+  
       } else {
         throw new Error("User data not found.");
       }
@@ -169,7 +101,7 @@ const Login = () => {
       console.error("Login Error:", error.message);
       Alert.alert("Login Error", error.message);
     }
-  };
+  };  
 
 
   const handleForgotPassword = async () => {

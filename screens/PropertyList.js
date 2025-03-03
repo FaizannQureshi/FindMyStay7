@@ -522,20 +522,6 @@ const PropertyList = ({ navigation }) => {
       </MapView>
 
 
-      {/* Upload Buttons */}
-      {/* <TouchableOpacity style={styles.uploadButton}>
-        <Ionicons name="cloud-upload-outline" size={20} color="black" />
-        <Text style={styles.uploadText}>
-          Upload front and back side picture of your CNIC/Passport
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.uploadButton}>
-        <Ionicons name="cloud-upload-outline" size={20} color="black" />
-        <Text style={styles.uploadText}>
-          Upload pictures of your complete Property Document
-        </Text>
-      </TouchableOpacity> */}
-
       <TouchableOpacity style={styles.uploadButton} onPress={pickDocument}>
         <Ionicons name="cloud-upload-outline" size={20} color="white" />
         <Text style={styles.uploadText}>
@@ -621,6 +607,7 @@ const PropertyList = ({ navigation }) => {
                 <TextInput
                   style={styles.priceInput}
                   placeholder="Price (per month)"
+                  placeholderTextColor="gray"
                   keyboardType="numeric"
                   value={roomPricing[room.key]?.price || ''}
                   onChangeText={(text) =>
@@ -633,6 +620,7 @@ const PropertyList = ({ navigation }) => {
                 <TextInput
                   style={styles.priceInput}
                   placeholder="Number of Rooms"
+                  placeholderTextColor="gray"
                   keyboardType="numeric"
                   value={roomPricing[room.key]?.quantity || ''}
                   onChangeText={(text) =>
@@ -707,6 +695,7 @@ const PropertyList = ({ navigation }) => {
               <TextInput
                 style={styles.priceInput}
                 placeholder="Enter Price"
+                placeholderTextColor="gray"
                 keyboardType="numeric"
                 value={addOns[addon.key].price}
                 onChangeText={(text) =>
