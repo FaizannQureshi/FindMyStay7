@@ -153,7 +153,7 @@ const Signup = () => {
           placeholderTextColor="#9CA3AF"
           value={fullName}
           onChangeText={setFullName}
-        />;
+        />
       </View>
 
       <View style={styles.inputContainer}>

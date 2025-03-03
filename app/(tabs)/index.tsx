@@ -29,9 +29,7 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="Welcome"
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Welcome"
       >
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Login" component={Login} />
@@ -44,7 +42,7 @@ const App = () => {
         <Stack.Screen name="ProfilePage" component={ProfilePage} />
         <Stack.Screen name="ConfirmPay" component={ConfirmPay} />
         <Stack.Screen name="SuccessPage" component={SuccessPage} />
-        <Stack.Screen name="EditProfile" component={EditProfile} />
+        {/* <Stack.Screen name="EditProfile" component={EditProfile} /> */}
         <Stack.Screen name="PropertyList" component={PropertyList} />
         <Stack.Screen name="SuccessPagePropertyUpload" component={SuccessPagePropertyUpload}/>
         <Stack.Screen name="LandlordNotifications" component={LandlordNotifications} />

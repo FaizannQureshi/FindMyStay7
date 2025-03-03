@@ -5,7 +5,7 @@ import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/fire
 import { db } from '../firebase/firebaseConfig';
 import styles from '../styles/BookingsStyles';
 
-const BookingsPage = ({ navigation }) => {
+const YourProperties = ({ navigation }) => {
   const [tab, setTab] = useState('Upcoming'); // 'Upcoming' or 'Past'
   const [activeProperties, setActiveProperties] = useState([]);
   const [pastProperties, setPastProperties] = useState([]);
@@ -159,4 +159,4 @@ const BookingsPage = ({ navigation }) => {
   );
 };
 
-export default BookingsPage;
+export default YourProperties;

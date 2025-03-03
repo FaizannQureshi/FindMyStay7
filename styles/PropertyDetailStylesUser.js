@@ -1,4 +1,6 @@
 import styled from 'styled-components/native';
+import { Dimensions } from 'react-native';
+
 
 export const ScrollViewStyled = styled.ScrollView`
   flex: 1;
@@ -23,10 +25,10 @@ export const HeaderTitle = styled.Text`
 `;
 
 export const OptionsButton = styled.TouchableOpacity``;
-
+const { width: screenWidth } = Dimensions.get('window');
 export const ImageStyled = styled.Image`
-  width: 100%;
-  height: 200px;
+  width: ${screenWidth}px;
+  height: 300px;
 `;
 
 export const Features = styled.View`

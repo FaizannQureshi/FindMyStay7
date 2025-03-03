@@ -58,7 +58,7 @@ const PropertyCard = ({ navigation }) => {
                         <Card>
                             {/* Static image - just display the first image from the array */}
                             <CardImage
-                                source={{ uri: property.images && property.images.length > 0 ? property.images[0] : 'https://via.placeholder.com/200x150' }}
+                                source={{ uri: property.propertyImages && property.propertyImages.length > 0 ? property.propertyImages[0] : 'https://via.placeholder.com/200x150' }}
                                 style={{ width: 200, height: 150 }}
                                 resizeMode="cover"
                             />
