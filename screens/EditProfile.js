@@ -1,17 +1,99 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import * as ImagePicker from 'expo-image-picker';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import styles from '../styles/EditProfileStyles';
 
+const EditProfilePage = ({ navigation, route }) => {
+  const [profileImage, setProfileImage] = useState(null);
+  const [fullName, setFullName] = useState('');
+  const [user, setUser] = useState(null);
 
-const EditProfilePage = ({ navigation }) => {
-  const [gender, setGender] = useState('Male');
+  useEffect(() => {
+    const auth = getAuth();
+    const db = getFirestore();
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+      setUser(currentUser);
+      const userDocRef = doc(db, 'users', currentUser.uid);
+
+      getDoc(userDocRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          setProfileImage(userData.photoURL || null);
+          setFullName(userData.fullName || '');
+        }
+      });
+    }
+
+    if (route.params?.profileImage) {
+      setProfileImage(route.params.profileImage);
+    }
+  }, [route.params?.profileImage]);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const selectedImage = result.assets[0].uri;
+      setProfileImage(selectedImage);
+      uploadImageToFirebase(selectedImage);
+    }
+  };
+
+  const uploadImageToFirebase = async (imageUri) => {
+    if (!user) return;
+
+    const storage = getStorage();
+    const fileName = `${user.uid}.jpg`;
+    const storageRef = ref(storage, `profile_pictures/${fileName}`);
+
+    try {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      await uploadBytes(storageRef, blob);
+
+      const downloadURL = await getDownloadURL(storageRef);
+      setProfileImage(downloadURL);
+
+      const db = getFirestore();
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, { photoURL: downloadURL });
+
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
+  const updateProfile = async () => {
+    if (!user) return;
+
+    try {
+      const db = getFirestore();
+      const userDocRef = doc(db, 'users', user.uid);
+
+      await updateDoc(userDocRef, { name:fullName });
+
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.title}>Edit Profile</Text>
@@ -21,11 +103,9 @@ const EditProfilePage = ({ navigation }) => {
       <View style={styles.profilePicContainer}>
         <Image
           style={styles.profilePic}
-          source={{
-            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkUBvvFmkFgqojBT8GXgGBKVaBiqEuBgC0Sg&s', // Replace with the actual image URL
-          }}
+          source={profileImage ? { uri: profileImage } : require('../Images/default.jpg')}
         />
-        <TouchableOpacity style={styles.editIcon}>
+        <TouchableOpacity style={styles.editIcon} onPress={pickImage}>
           <Icon name="edit" size={18} color="#fff" />
         </TouchableOpacity>
       </View>
@@ -33,43 +113,16 @@ const EditProfilePage = ({ navigation }) => {
       {/* Input Fields */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Name</Text>
-        <TextInput style={styles.input} placeholder="Faizan Qureshi" />
-
-        <Text style={styles.label}>Email Address</Text>
-        <TextInput style={styles.input} placeholder="faizan@gmail.com" keyboardType="email-address" />
-
-        <Text style={styles.label}>Mobile Number</Text>
-        <TextInput style={styles.input} placeholder="(209) 555-0104" keyboardType="phone-pad" />
-
-        <Text style={styles.label}>Date of Birth</Text>
-        <View style={styles.dateInputContainer}>
-          <TextInput style={[styles.input, styles.dateInput]} placeholder="August 14, 2023" />
-          <Icon name="calendar-today" size={20} color="#666" />
-        </View>
-      </View>
-
-      {/* Gender Selection */}
-      <Text style={styles.genderLabel}>Gender</Text>
-      <View style={styles.genderContainer}>
-        <TouchableOpacity
-          style={styles.genderOption}
-          onPress={() => setGender('Male')}
-        >
-          <View style={[styles.radioButton, gender === 'Male' && styles.radioButtonSelected]} />
-          <Text style={styles.genderText}>Male</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.genderOption}
-          onPress={() => setGender('Female')}
-        >
-          <View style={[styles.radioButton, gender === 'Female' && styles.radioButtonSelected]} />
-          <Text style={styles.genderText}>Female</Text>
-        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="Full Name"
+          value={fullName}
+          onChangeText={(text) => setFullName(text)}
+        />
       </View>
 
       {/* Update Button */}
-      <TouchableOpacity style={styles.updateButton}>
+      <TouchableOpacity style={styles.updateButton} onPress={updateProfile}>
         <Text style={styles.updateButtonText}>Update</Text>
       </TouchableOpacity>
     </View>
