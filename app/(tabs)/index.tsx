@@ -22,7 +22,7 @@ import LandlordEditProfile from "../../screens/LandlordEditProfile";
 import VerificationWaiting from "../../screens/VerificationWaiting";
 import PropertyCard from "../../screens/PropertyCard";
 import FullScreenImage from "../../screens/FullScreenImage";
-// import ChangePasswordScreen from "../../screens/ChangePasswordScreen";
+import ChangePasswordScreen from "../../screens/ChangePasswordScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +42,7 @@ const App = () => (
       <Stack.Screen name="ConfirmPay" component={ConfirmPay} />
       <Stack.Screen name="SuccessPage" component={SuccessPage} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
-      {/* <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} /> */}
+      <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
       <Stack.Screen name="FullScreenImage" component={FullScreenImage} />
       <Stack.Screen name="PropertyList" component={PropertyList} />
       <Stack.Screen name="SuccessPagePropertyUpload" component={SuccessPagePropertyUpload} />
