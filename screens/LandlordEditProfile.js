@@ -103,7 +103,7 @@ const LandlordEditProfilePage = ({ navigation, route }) => {
       <View style={styles.profilePicContainer}>
         <Image
           style={styles.profilePic}
-          source={profileImage ? { uri: profileImage } : require('../Images/default.jpg')}
+          source={profileImage ? { uri: profileImage } : require('../Images/default.png')}
         />
         <TouchableOpacity style={styles.editIcon} onPress={pickImage}>
           <Icon name="edit" size={18} color="#fff" />

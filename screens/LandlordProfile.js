@@ -118,7 +118,7 @@ const LandlordProfile = ({ navigation }) => {
             source={
               profileImage
                 ? { uri: profileImage }
-                : require("../Images/default.jpg")
+                : require("../Images/default.png")
             }
             style={styles.profileImage}
           />
