@@ -23,6 +23,7 @@ import VerificationWaiting from "../../screens/VerificationWaiting";
 import PropertyCard from "../../screens/PropertyCard";
 import FullScreenImage from "../../screens/FullScreenImage";
 import ChangePasswordScreen from "../../screens/ChangePasswordScreen";
+import SeeAllScreen from "../../screens/SeeAllScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ const App = () => (
       <Stack.Screen name="LandlordProfile" component={LandlordProfile} />
       <Stack.Screen name="LandlordEditProfile" component={LandlordEditProfile} />
       <Stack.Screen name="VerificationWaiting" component={VerificationWaiting} />
+      <Stack.Screen name="SeeAllScreen" component={SeeAllScreen} />
       <Stack.Screen name="PropertyCard" component={PropertyCard} />
     </Stack.Navigator>
   </View>

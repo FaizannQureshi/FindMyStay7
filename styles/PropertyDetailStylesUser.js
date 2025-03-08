@@ -13,7 +13,7 @@ export const Header = styled.View`
   align-items: center;
   padding: 16px;
   background-color: #f6ece5;
-  padding-top: 50px;
+  padding-top: 100px;
 `;
 
 export const BackButton = styled.TouchableOpacity``;

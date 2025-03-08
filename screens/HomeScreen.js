@@ -327,9 +327,10 @@ const HomeScreen = ({ navigation, route }) => {
         </Categories>
 
         {/* PropertyCard component - now with category filtering */}
-        <PropertyCard 
-          navigation={navigation} 
+        <PropertyCard
+          navigation={navigation}
           category={selectedCategory}
+          userLocation={selectedLocation}
         />
 
         {/* Bottom Navigation */}

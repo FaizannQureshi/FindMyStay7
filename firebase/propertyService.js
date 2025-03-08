@@ -14,7 +14,7 @@ export const fetchProperties = async () => {
   const propertyList = propertySnapshot.docs
     .map((doc) => {
       const data = doc.data();
-      
+
       // Skip non-active properties
       if (data.status !== "active") {
         return null;
@@ -29,7 +29,9 @@ export const fetchProperties = async () => {
         id: doc.id,
         ...data,  // Include all original properties
         startingPrice: lowestRoomPrice,
-        rating: staticRatings[data.propertyTitle] || 3.5
+        rating: staticRatings[data.propertyTitle] || 3.5,
+        latitude: data.latitude, // Ensure we include latitude
+        longitude: data.longitude, // Ensure we include longitude
       };
     })
     .filter(property => property !== null); // Remove null entries (non-active properties)

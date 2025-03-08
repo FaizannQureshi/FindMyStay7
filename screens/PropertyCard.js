@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import {
@@ -13,63 +13,72 @@ import {
     CardSubtitle,
     CardFooter,
     CardPrice,
-} from "../styles/HomeScreenStyles"; // Adjust path as needed
+} from "../styles/HomeScreenStyles"; // ✅ Ensure correct import path
 
 import { fetchProperties } from "../firebase/propertyService";
+import haversine from "haversine-distance";
 
-const PropertyCard = ({ navigation }) => {
+const PropertyCard = ({ navigation, userLocation }) => {
     const [popularProperties, setPopularProperties] = useState([]);
     const [nearbyProperties, setNearbyProperties] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
-            const data = await fetchProperties();
+            try {
+                const data = await fetchProperties();
 
-            // ✅ Sort by rating for Popular Hostels
-            const sortedByRating = [...data].sort((a, b) => b.rating - a.rating);
-            setPopularProperties(sortedByRating);
+                // ✅ Sort by Rating for "Popular Hostels"
+                const sortedByRating = [...data].sort((a, b) => b.rating - a.rating);
+                setPopularProperties(sortedByRating);
 
-            // 📍 Sort by location for Hostels Near You
-            const sortedByLocation = [...data].sort((a, b) =>
-                a.location.localeCompare(b.location)
-            );
-            setNearbyProperties(sortedByLocation);
+                // 📍 Sort by Distance for "Hostels Near You"
+                if (userLocation) {
+                    const sortedByDistance = data.map((property) => {
+                        const distance = haversine(userLocation, {
+                            latitude: property.latitude,
+                            longitude: property.longitude,
+                        });
+                        return { ...property, distance };
+                    });
+
+                    sortedByDistance.sort((a, b) => a.distance - b.distance);
+                    setNearbyProperties(sortedByDistance);
+                }
+            } catch (error) {
+                console.error("Error fetching properties:", error);
+            }
         };
+
         getData();
-    }, []);
+    }, [userLocation]);
 
     const renderSection = (title, properties) => (
         <Section>
             <SectionHeader>
                 <SectionHeaderText>{title}</SectionHeaderText>
-                <SeeAll>See all</SeeAll>
+                <SeeAll
+                    onPress={() => navigation.navigate("SeeAllScreen", { title, properties })}
+                >
+                    See all
+                </SeeAll>
             </SectionHeader>
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {properties.map((property) => (
                     <TouchableOpacity
                         key={property.id}
-                        onPress={() =>
-                            navigation.navigate("PropertyDetailUser", {
-                                property: property, // Pass the complete property object
-                            })
-                        }
+                        onPress={() => navigation.navigate("PropertyDetailUser", { property })}
                     >
                         <Card>
-                            {/* Static image - just display the first image from the array */}
                             <CardImage
-                                source={{ uri: property.propertyImages && property.propertyImages.length > 0 ? property.propertyImages[0] : 'https://via.placeholder.com/200x150' }}
-                                style={{ width: 200, height: 150 }}
+                                source={{ uri: property.propertyImages?.[0] || "https://via.placeholder.com/200x150" }}
                                 resizeMode="cover"
                             />
-
                             <CardContent>
-                                <CardTitle>{property.title}</CardTitle>
+                                <CardTitle>{property.propertyTitle}</CardTitle>
                                 <CardSubtitle>{property.location}</CardSubtitle>
                                 <CardFooter>
-                                    <CardPrice>
-                                        Starting from {property.startingPrice} per month
-                                    </CardPrice>
+                                    <CardPrice>Starting from {property.startingPrice} per month</CardPrice>
                                     <Icon name="star" size={16} color="#FFD700" />
                                     <CardSubtitle>{property.rating}</CardSubtitle>
                                 </CardFooter>
@@ -89,4 +98,4 @@ const PropertyCard = ({ navigation }) => {
     );
 };
 
-export default PropertyCard;
+export default PropertyCard; // ✅ Ensure correct export
