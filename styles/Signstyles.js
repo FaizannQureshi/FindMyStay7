@@ -3,6 +3,7 @@ export const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
+    paddingTop: 80,
     backgroundColor: "#f6ece5",
     justifyContent: "center",
   },

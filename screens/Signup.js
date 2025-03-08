@@ -33,7 +33,6 @@ const Signup = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
 
 
-
   useEffect(() => {
     if (photos.length === 1) setUploadText("Upload back of your CNIC");
     if (photos.length === 2) setUploadText("Both CNIC sides uploaded ✔️");
@@ -87,7 +86,7 @@ const Signup = () => {
 
   // Update the handleSubmit function:
   const handleSubmit = async () => {
-    if (!email || !password || !selectedGender || !confirmPassword || !selectedRole || !photos.length || !dob || !cnic || !fullName) {
+    if (!email || !password || !confirmPassword || !selectedRole || !photos.length || !dob || !cnic || !fullName) {
       Alert.alert("Missing Information", "Please fill out all fields.");
       return;
     }
@@ -155,7 +154,7 @@ const Signup = () => {
           placeholderTextColor="#9CA3AF"
           value={fullName}
           onChangeText={setFullName}
-        />;
+        />
       </View>
 
       <View style={styles.inputContainer}>
@@ -234,9 +233,8 @@ const Signup = () => {
         </TouchableOpacity>
       </View>
 
-
-       {/* Gender Selection */}
-       <Text style={styles.label}>Gender</Text>
+      {/* Gender Selection */}
+      <Text style={styles.label}>Gender</Text>
        <View style={styles.radioGroup}>
         <TouchableOpacity
           style={styles.radioButtonContainer}
