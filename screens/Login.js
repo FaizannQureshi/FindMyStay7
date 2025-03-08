@@ -194,13 +194,13 @@ const Login = () => {
       </TouchableOpacity>
 
       {/* Divider */}
-      <Text style={styles.orText}>OR</Text>
+      {/* <Text style={styles.orText}>OR</Text> */}
 
       {/* Google Login */}
-      <TouchableOpacity style={styles.googleButton}>
+      {/* <TouchableOpacity style={styles.googleButton}>
         <Icon name="google" size={24} color="#5d4940" style={styles.googleIcon} />
         <Text style={styles.googleButtonText}>Log in with your Google account</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Sign Up Link */}
       <View style={styles.signUpText}>

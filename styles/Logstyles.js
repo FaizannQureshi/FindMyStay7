@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
       backgroundColor: "#f6ece5",
       paddingHorizontal: 10,
       justifyContent: "center",
-      padding: 100,
-      paddingTop: 140,
+      padding: 200,
+      paddingTop: 220,
     },
     header: {
       fontSize: 24,
