@@ -39,11 +39,13 @@ export const styles = StyleSheet.create({
     justifyContent: "center", // Changed from "space-between"
     alignItems: "center", // Added to ensure vertical centering
     marginVertical: 10,
+    marginVertical: 10, //gender
+    gap: 15, //gender
   },
   radioButtonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 35, // Added to create space between radio buttons
+    marginHorizontal: 10, // Added to create space between radio buttons
   },
   radioOuterCircle: {
     height: 20,
@@ -147,6 +149,14 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 10,
+  },
+
+  //Gender
+  genderLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#5d4940",
+    marginBottom: 5,
   },
 
   imageLabel: {

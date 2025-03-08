@@ -27,6 +27,7 @@ const Signup = () => {
   const [photos, setPhotos] = useState([]);
   const [dob, setDob] = useState("");
   const [cnic, setCnic] = useState("");
+  const [selectedGender, setSelectedGender] = useState(null);
   const [fullName, setFullName] = useState("");
   const [uploadText, setUploadText] = useState("Upload front of your CNIC");
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -86,7 +87,7 @@ const Signup = () => {
 
   // Update the handleSubmit function:
   const handleSubmit = async () => {
-    if (!email || !password || !confirmPassword || !selectedRole || !photos.length || !dob || !cnic || !fullName) {
+    if (!email || !password || !selectedGender || !confirmPassword || !selectedRole || !photos.length || !dob || !cnic || !fullName) {
       Alert.alert("Missing Information", "Please fill out all fields.");
       return;
     }
@@ -126,6 +127,7 @@ const Signup = () => {
       const user = await signUpUser(email, password, {
         role: selectedRole,
         name: fullName,
+        gender: selectedGender,
         cnic,
         dob,
         photos,
@@ -153,7 +155,7 @@ const Signup = () => {
           placeholderTextColor="#9CA3AF"
           value={fullName}
           onChangeText={setFullName}
-        />
+        />;
       </View>
 
       <View style={styles.inputContainer}>
@@ -229,6 +231,41 @@ const Signup = () => {
             size={20}
             color="#5d4940"
           />
+        </TouchableOpacity>
+      </View>
+
+
+       {/* Gender Selection */}
+       <Text style={styles.label}>Gender</Text>
+       <View style={styles.radioGroup}>
+        <TouchableOpacity
+          style={styles.radioButtonContainer}
+          onPress={() => setSelectedGender("Male")}
+        >
+          <View style={styles.radioOuterCircle}>
+            {selectedGender === "Male" && <View style={styles.radioInnerCircle} />}
+          </View>
+          <Text style={styles.radioText}>Male</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.radioButtonContainer}
+          onPress={() => setSelectedGender("Female")}
+        >
+          <View style={styles.radioOuterCircle}>
+            {selectedGender === "Female" && <View style={styles.radioInnerCircle} />}
+          </View>
+          <Text style={styles.radioText}>Female</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.radioButtonContainer}
+          onPress={() => setSelectedGender("Prefer not to say")}
+        >
+          <View style={styles.radioOuterCircle}>
+            {selectedGender === "Prefer not to say" && <View style={styles.radioInnerCircle} />}
+          </View>
+          <Text style={styles.radioText}>Prefer not to say</Text>
         </TouchableOpacity>
       </View>
 
