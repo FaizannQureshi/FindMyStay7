@@ -451,11 +451,11 @@ const PropertyDetail = ({ route, navigation }) => {
                       Add-ons: {selectedAddOns.map(addon => addon.type.charAt(0).toUpperCase() + addon.type.slice(1)).join(', ')}
                     </Text>
                   )}
-                  <Text style={styles.summaryTotal}>Total: Rs {calculateTotalPrice()}</Text>
+                  {/* <Text style={styles.summaryTotal}>Total: Rs {calculateTotalPrice()}</Text> */}
                 </View>
 
                 <TouchableOpacity style={styles.actionButton} onPress={proceedToConfirmPay}>
-                  <Text style={styles.actionButtonText}>Proceed to Payment</Text>
+                  <Text style={styles.actionButtonText}>Book Now</Text>
                 </TouchableOpacity>
               </View>
             </View>

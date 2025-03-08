@@ -339,7 +339,7 @@ const HomeScreen = ({ navigation, route }) => {
             <Icon name="home" size={24} color="#5d4940" />
             <NavText>Home</NavText>
           </NavItem>
-          <NavItem>
+          <NavItem onPress={() => navigation.navigate('Chatbot')}>
             <Icon name="person" size={24} color="#666" />
             <NavText>Your Personal AI</NavText>
           </NavItem>
